@@ -1,121 +1,176 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<style>
+    .specialty-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .specialty-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        height: 100%;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .specialty-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #0d6efd;
+    }
+    
+    .specialty-card.selected {
+        border-color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+    
+    .specialty-icon {
+        font-size: 2rem;
+        color: #0d6efd;
+        margin-bottom: 1rem;
+    }
+    
+    .specialty-title {
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .specialty-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
 {% block dashboard_content %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar 
-        <div class="col-md-3 col-lg-2 sidebar py-3">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-calendar-alt"></i> Appointments
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-notes-medical"></i> Medical History
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-hospital"></i> Hospitals
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-clipboard-list"></i> Health Surveys
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-pills"></i> Medicine Delivery
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <i class="fas fa-shield-alt"></i> Insurance
-                </a>
-                <a href="#" class="list-group-item list-group-item-action text-danger">
-                    <i class="fas fa-exclamation-circle"></i> Emergency Services
-                </a>
-            </div>
-        </div>-->
-
-        <!-- Main Content -->
-        <div class="col-md-9 col-lg-10 content-wrapper">
-            <h2 class="mb-4">Welcome, {{ request.session.user_name }}!</h2>
-            
-            <!-- Quick Access Features -->
+<div class="container-fluid py-4">
+    <!-- Specialty Selection Section -->
+    <div class="specialty-section mb-4">
+        <h2 class="mb-4">What kind of medical care do you need?</h2>
+        <form id="specialtyForm" action="{% url 'hospital_list' %}" method="GET">
             <div class="row g-4">
-                <!-- Profile Management -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-user-circle fa-3x text-primary"></i>
+                {% for specialty in specialties %}
+                <div class="col-md-4">
+                    <div class="specialty-card" onclick="selectSpecialty(this, '{{ specialty.id }}')">
+                        <div class="specialty-icon">
+                            <i class="{{ specialty.icon }}"></i>
                         </div>
-                        <h4>Profile Management</h4>
-                        <p>Update your personal information and medical history.</p>
-                        <a href="#" class="btn btn-outline-primary mt-2">Manage Profile</a>
+                        <h4 class="specialty-title">{{ specialty.name }}</h4>
+                        <p class="specialty-description">{{ specialty.description }}</p>
                     </div>
                 </div>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="specialty" id="selectedSpecialty">
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-light btn-lg px-5">Find Hospitals</button>
+            </div>
+        </form>
+    </div>
 
-                <!-- Appointments -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-calendar-check fa-3x text-primary"></i>
-                        </div>
-                        <h4>Appointments</h4>
-                        <p>Schedule and manage your medical appointments.</p>
-                        <a href="#" class="btn btn-outline-primary mt-2">Book Appointment</a>
-                    </div>
+    <!-- Quick Information -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-info-circle text-primary me-2"></i>How it works</h5>
+                    <ol class="mb-0">
+                        <li>Select your medical specialty</li>
+                        <li>View matching hospitals</li>
+                        <li>Check ratings and availability</li>
+                        <li>Book your appointment</li>
+                    </ol>
                 </div>
-
-                <!-- Medical History -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-file-medical fa-3x text-primary"></i>
-                        </div>
-                        <h4>Medical History</h4>
-                        <p>View and update your medical records.</p>
-                        <a href="#" class="btn btn-outline-primary mt-2">View Records</a>
-                    </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-star text-primary me-2"></i>Why Choose Us</h5>
+                    <ul class="mb-0">
+                        <li>Verified hospitals and doctors</li>
+                        <li>Real-time availability</li>
+                        <li>Patient reviews and ratings</li>
+                        <li>24/7 support</li>
+                    </ul>
                 </div>
-
-                <!-- Medicine Delivery -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-pills fa-3x text-primary"></i>
-                        </div>
-                        <h4>Medicine Delivery</h4>
-                        <p>Order and track your medicine delivery.</p>
-                        <a href="#" class="btn btn-outline-primary mt-2">Order Medicine</a>
-                    </div>
-                </div>
-
-                <!-- Insurance -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
-                        </div>
-                        <h4>Insurance</h4>
-                        <p>Manage your insurance information.</p>
-                        <a href="#" class="btn btn-outline-primary mt-2">View Insurance</a>
-                    </div>
-                </div>
-
-                <!-- Emergency Services -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4 emergency-card">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
-                        </div>
-                        <h4>Emergency Services</h4>
-                        <p>Quick access to emergency help.</p>
-                        <a href="#" class="btn btn-danger mt-2">Get Emergency Help</a>
-                    </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-phone-alt text-primary me-2"></i>Need Help?</h5>
+                    <p class="mb-2">Our support team is available 24/7</p>
+                    <a href="tel:1800-123-4567" class="btn btn-primary">Call Support</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define specialties data
+    const specialties = [
+        { id: 'cardiology', name: 'Cardiology', icon: 'fas fa-heartbeat', description: 'Heart and cardiovascular care' },
+        { id: 'dental', name: 'Dental', icon: 'fas fa-tooth', description: 'Dental and oral health care' },
+        { id: 'dermatology', name: 'Dermatology', icon: 'fas fa-allergies', description: 'Skin, hair, and nail care' },
+        { id: 'ent', name: 'ENT', icon: 'fas fa-ear', description: 'Ear, nose, and throat specialists' },
+        { id: 'eye', name: 'Eye Care', icon: 'fas fa-eye', description: 'Vision and eye health care' },
+        { id: 'gastrology', name: 'Gastrology', icon: 'fas fa-stomach', description: 'Digestive system care' },
+        { id: 'general', name: 'General Medicine', icon: 'fas fa-user-md', description: 'General health care' },
+        { id: 'gynecology', name: 'Gynecology', icon: 'fas fa-female', description: 'Women\'s health care' },
+        { id: 'neurology', name: 'Neurology', icon: 'fas fa-brain', description: 'Brain and nervous system care' },
+        { id: 'orthopedics', name: 'Orthopedics', icon: 'fas fa-bone', description: 'Bone and joint care' },
+        { id: 'pediatrics', name: 'Pediatrics', icon: 'fas fa-baby', description: 'Children\'s health care' },
+        { id: 'physiotherapy', name: 'Physiotherapy', icon: 'fas fa-walking', description: 'Physical therapy and rehabilitation' },
+        { id: 'plastic-surgery', name: 'Plastic Surgery', icon: 'fas fa-magic', description: 'Reconstructive and cosmetic surgery' },
+        { id: 'pulmonology', name: 'Pulmonology', icon: 'fas fa-lungs', description: 'Respiratory system care' },
+        { id: 'urology', name: 'Urology', icon: 'fas fa-kidneys', description: 'Urinary system care' }
+    ];
+
+    // Generate specialty cards
+    const row = document.querySelector('.row.g-4');
+    specialties.forEach(specialty => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+        col.innerHTML = `
+            <div class="specialty-card" onclick="selectSpecialty(this, '${specialty.id}')">
+                <div class="specialty-icon">
+                    <i class="${specialty.icon}"></i>
+                </div>
+                <h4 class="specialty-title">${specialty.name}</h4>
+                <p class="specialty-description">${specialty.description}</p>
+            </div>
+        `;
+        row.appendChild(col);
+    });
+});
+
+function selectSpecialty(card, specialtyId) {
+    // Remove selection from all cards
+    document.querySelectorAll('.specialty-card').forEach(c => {
+        c.classList.remove('selected');
+    });
+    
+    // Add selection to clicked card
+    card.classList.add('selected');
+    
+    // Update hidden input
+    document.getElementById('selectedSpecialty').value = specialtyId;
+}
+</script>
 {% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-card {
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    
+    .hospital-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+    }
+    
+    .availability-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="hospital-header">
+        <h2 class="mb-3">Hospitals for {{ specialty|title }} Care</h2>
+        <p class="lead mb-0">Find the best hospitals and book your appointment</p>
+    </div>
+
+    <!-- Hospital Listings -->
+    <div class="row">
+        {% if hospitals %}
+            {% for hospital in hospitals %}
+            <div class="col-md-6 mb-4">
+                <div class="hospital-card p-3">
+                    <span class="badge bg-success availability-badge">Open 24/7</span>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{% static 'images/hospital-default.jpg' %}" class="img-fluid rounded" alt="{{ hospital.name }}">
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{ hospital.name }}</h4>
+                            <div class="rating-stars mb-2">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= hospital.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif forloop.counter <= hospital.rating|add:"0.5" %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ms-2">({{ hospital.rating }}/5)</span>
+                            </div>
+                            <p><i class="fas fa-map-marker-alt text-danger"></i> {{ hospital.address }}</p>
+                            <div class="facilities mb-2">
+                                {% if hospital.has_emergency %}
+                                    <span class="badge bg-danger me-2">Emergency Services</span>
+                                {% endif %}
+                                {% for specialty in hospital.specialties %}
+                                    <span class="badge bg-info me-2">{{ specialty }}</span>
+                                {% endfor %}
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'appointments' %}?hospital={{ hospital.id }}'">
+                                Book Appointment
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No hospitals found for {{ specialty|title }} specialty. Please try a different specialty.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

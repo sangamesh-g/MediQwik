@@ -150,9 +150,6 @@
                     <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                    <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
-                        <i class="fas fa-user"></i> Profile
-                    </a>
                     <a href="{% url 'appointments' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'appointments' %}active{% endif %}">
                         <i class="fas fa-calendar-alt"></i> Appointments
                     </a>

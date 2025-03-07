@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Register, Login
+from .models import Register, Login, Hospital
 
 @admin.register(Register)
 class RegisterAdmin(admin.ModelAdmin):
@@ -14,3 +14,9 @@ class LoginAdmin(admin.ModelAdmin):
     search_fields = ('user__email', 'ip_address')
     list_filter = ('is_successful', 'login_time')
     readonly_fields = ('login_time', 'logout_time')
+
+@admin.register(Hospital)
+class HospitalAdmin(admin.ModelAdmin):
+    list_display = ('name', 'rating', 'has_emergency', 'is_active')
+    search_fields = ('name', 'address', 'specialties')
+    list_filter = ('is_active', 'has_emergency', 'rating')

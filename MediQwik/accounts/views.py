@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Register, Login
+from .models import Register, Login, Hospital
 from django.contrib.auth.hashers import make_password, check_password
 import datetime
 
@@ -218,3 +218,16 @@ def emergency(request):
         messages.error(request, 'Please login to access emergency services')
         return redirect('login')
     return render(request, 'emergency.html')
+
+def hospital_list(request):
+    specialty = request.GET.get('specialty')
+    # Query hospitals that have the selected specialty
+    hospitals = Hospital.objects.filter(
+        is_active=True,
+        specialties__contains=[specialty]
+    ).order_by('-rating')
+    
+    return render(request, 'hospital_list.html', {
+        'hospitals': hospitals,
+        'specialty': specialty
+    })
