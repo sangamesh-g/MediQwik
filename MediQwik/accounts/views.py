@@ -163,9 +163,26 @@ def dashboard(request):
     
     try:
         user = Register.objects.get(id=request.session['user_id'])
+        specialties = [
+            {'id': 'cardiology', 'name': 'Cardiology', 'icon': 'fas fa-heartbeat'},
+            {'id': 'dental', 'name': 'Dental', 'icon': 'fas fa-tooth'},
+            {'id': 'dermatology', 'name': 'Dermatology', 'icon': 'fas fa-allergies'},
+            {'id': 'ent', 'name': 'ENT', 'icon': 'fas fa-ear'},
+            {'id': 'eye', 'name': 'Eye Care', 'icon': 'fas fa-eye'},
+            {'id': 'gastrology', 'name': 'Gastrology', 'icon': 'fas fa-stomach'},
+            {'id': 'general', 'name': 'General Medicine', 'icon': 'fas fa-user-md'},
+            {'id': 'gynecology', 'name': 'Gynecology', 'icon': 'fas fa-female'},
+            {'id': 'neurology', 'name': 'Neurology', 'icon': 'fas fa-brain'},
+            {'id': 'orthopedics', 'name': 'Orthopedics', 'icon': 'fas fa-bone'},
+            {'id': 'pediatrics', 'name': 'Pediatrics', 'icon': 'fas fa-baby'},
+            {'id': 'physiotherapy', 'name': 'Physiotherapy', 'icon': 'fas fa-walking'},
+            {'id': 'plastic-surgery', 'name': 'Plastic Surgery', 'icon': 'fas fa-magic'},
+            {'id': 'pulmonology', 'name': 'Pulmonology', 'icon': 'fas fa-lungs'},
+            {'id': 'urology', 'name': 'Urology', 'icon': 'fas fa-kidneys'}
+        ]
         context = {
             'user': user,
-            # Add more context data as needed
+            'specialties': specialties
         }
         return render(request, 'dashboard.html', context)
     except Register.DoesNotExist:
@@ -231,3 +248,91 @@ def hospital_list(request):
         'hospitals': hospitals,
         'specialty': specialty
     })
+
+def hospitals(request):
+    """Render the hospitals page with filtering"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to view hospitals')
+        return redirect('login')
+    
+    specialty = request.GET.get('specialty', '')
+    
+    # Get all hospitals if no specialty is selected, otherwise filter by specialty
+    if specialty:
+        hospitals = Hospital.objects.filter(
+            is_active=True,
+            specialties__contains=specialty
+        ).order_by('-rating')
+    else:
+        hospitals = Hospital.objects.filter(is_active=True).order_by('-rating')
+    
+    # Get unique specialties from the database
+    all_specialties = Hospital.objects.values_list('specialties', flat=True)
+    unique_specialties = set()
+    for hospital_specialties in all_specialties:
+        if isinstance(hospital_specialties, list):
+            unique_specialties.update(hospital_specialties)
+    
+    specialties = [
+        {
+            'id': specialty,
+            'name': specialty.replace('-', ' ').title(),
+            'icon': get_specialty_icon(specialty)
+        }
+        for specialty in sorted(unique_specialties)
+    ]
+    
+    return render(request, 'hospitals.html', {
+        'hospitals': hospitals,
+        'specialties': specialties,
+        'selected_specialty': specialty
+    })
+
+def get_specialty_icon(specialty):
+    """Helper function to get the appropriate icon for each specialty"""
+    icons = {
+        'cardiology': 'fas fa-heartbeat',
+        'dental': 'fas fa-tooth',
+        'dermatology': 'fas fa-allergies',
+        'ent': 'fas fa-ear',
+        'eye': 'fas fa-eye',
+        'gastrology': 'fas fa-stomach',
+        'general': 'fas fa-user-md',
+        'gynecology': 'fas fa-female',
+        'neurology': 'fas fa-brain',
+        'orthopedics': 'fas fa-bone',
+        'pediatrics': 'fas fa-baby',
+        'physiotherapy': 'fas fa-walking',
+        'plastic-surgery': 'fas fa-magic',
+        'pulmonology': 'fas fa-lungs',
+        'urology': 'fas fa-kidneys'
+    }
+    return icons.get(specialty, 'fas fa-hospital')
+
+def medical_history(request):
+    """Render the medical history page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access medical history')
+        return redirect('login')
+    return render(request, 'medicalhistory.html')
+
+def health_surveys(request):
+    """Render the health surveys page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access health surveys')
+        return redirect('login')
+    return render(request, 'healthsurveys.html')
+
+def medicine_delivery(request):
+    """Render the medicine delivery page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access medicine delivery')
+        return redirect('login')
+    return render(request, 'medicinedelivery.html')
+
+def insurance(request):
+    """Render the insurance page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access insurance')
+        return redirect('login')
+    return render(request, 'insurance.html')

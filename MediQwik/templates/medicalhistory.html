@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .coming-soon-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        min-height: calc(100vh - 300px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        border-radius: 15px;
+    }
+    
+    .countdown {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 2rem 0;
+    }
+    
+    .feature-list {
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+    
+    .feature-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        backdrop-filter: blur(5px);
+    }
+    
+    .notify-form {
+        max-width: 400px;
+        margin: 2rem auto;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="coming-soon-section">
+        <div class="content">
+            <h1 class="display-4 mb-4">Medical History</h1>
+            <p class="lead mb-4">We're working hard to bring you a comprehensive medical history tracking system</p>
+            
+            <div class="countdown" id="countdown">
+                Coming Soon
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-history fa-2x mb-2"></i>
+                    <h5>Complete Medical Timeline</h5>
+                    <p class="mb-0">Track your entire medical history in one place</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-medical fa-2x mb-2"></i>
+                    <h5>Digital Records</h5>
+                    <p class="mb-0">Access your medical records anytime, anywhere</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-share-alt fa-2x mb-2"></i>
+                    <h5>Easy Sharing</h5>
+                    <p class="mb-0">Share your medical history with healthcare providers securely</p>
+                </div>
+            </div>
+            
+            <div class="notify-form">
+                <h5>Get Notified When We Launch</h5>
+                <form class="d-flex gap-2">
+                    <input type="email" class="form-control" placeholder="Enter your email">
+                    <button type="submit" class="btn btn-light">Notify Me</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

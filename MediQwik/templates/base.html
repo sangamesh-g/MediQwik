@@ -153,19 +153,19 @@
                     <a href="{% url 'appointments' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'appointments' %}active{% endif %}">
                         <i class="fas fa-calendar-alt"></i> Appointments
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{% url 'medical_history' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'medical_history' %}active{% endif %}">
                         <i class="fas fa-notes-medical"></i> Medical History
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{% url 'hospitals' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'hospitals' %}active{% endif %}">
                         <i class="fas fa-hospital"></i> Hospitals
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{% url 'health_surveys' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'health_surveys' %}active{% endif %}">
                         <i class="fas fa-clipboard-list"></i> Health Surveys
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{% url 'medicine_delivery' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'medicine_delivery' %}active{% endif %}">
                         <i class="fas fa-pills"></i> Medicine Delivery
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{% url 'insurance' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'insurance' %}active{% endif %}">
                         <i class="fas fa-shield-alt"></i> Insurance
                     </a>
                     <a href="{% url 'emergency' %}" class="list-group-item list-group-item-action text-danger {% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">

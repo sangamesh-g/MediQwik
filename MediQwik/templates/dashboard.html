@@ -56,25 +56,21 @@
     <!-- Specialty Selection Section -->
     <div class="specialty-section mb-4">
         <h2 class="mb-4">What kind of medical care do you need?</h2>
-        <form id="specialtyForm" action="{% url 'hospital_list' %}" method="GET">
-            <div class="row g-4">
-                {% for specialty in specialties %}
-                <div class="col-md-4">
-                    <div class="specialty-card" onclick="selectSpecialty(this, '{{ specialty.id }}')">
-                        <div class="specialty-icon">
-                            <i class="{{ specialty.icon }}"></i>
+        <div class="row g-4">
+            <!-- {% for specialty in specialties %}
+            <div class="col-md-4">
+                <a href="{% url 'hospitals' %}?specialty={{ specialty.id }}" class="text-decoration-none">
+                    <div class="specialty-card text-center">
+                        <div class="specialty-icon mb-3">
+                            <i class="{{ specialty.icon }} fa-3x text-primary"></i>
                         </div>
-                        <h4 class="specialty-title">{{ specialty.name }}</h4>
-                        <p class="specialty-description">{{ specialty.description }}</p>
+                        <h4 class="specialty-title text-dark">{{ specialty.name }}</h4>
+                        <p class="specialty-description text-muted">{{ specialty.description }}</p>
                     </div>
-                </div>
-                {% endfor %}
+                </a>
             </div>
-            <input type="hidden" name="specialty" id="selectedSpecialty">
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-light btn-lg px-5">Find Hospitals</button>
-            </div>
-        </form>
+            {% endfor %} -->
+        </div>
     </div>
 
     <!-- Quick Information -->
