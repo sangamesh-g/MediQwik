@@ -60,7 +60,7 @@ class Hospital(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=15)
     email = models.EmailField(blank=True, null=True)
-    specialties = models.JSONField()  # Store specialties as a JSON array
+    specialties = models.JSONField(default=list)  # Changed to have a default value
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
     is_active = models.BooleanField(default=True)
     has_emergency = models.BooleanField(default=False)

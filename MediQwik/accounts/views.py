@@ -227,7 +227,18 @@ def appointments(request):
     if 'user_id' not in request.session:
         messages.error(request, 'Please login to access appointments')
         return redirect('login')
-    return render(request, 'appointments.html')
+    
+    hospital_id = request.GET.get('hospital')
+    context = {}
+    
+    if hospital_id:
+        try:
+            hospital = Hospital.objects.get(id=hospital_id)
+            context['selected_hospital'] = hospital
+        except Hospital.DoesNotExist:
+            messages.error(request, 'Selected hospital not found')
+    
+    return render(request, 'appointments.html', context)
 
 def emergency(request):
     """Render the emergency services page"""
