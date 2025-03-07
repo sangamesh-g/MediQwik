@@ -20,7 +20,7 @@
         
         /* Navbar styles */
         .navbar-brand i {
-            color: #fff;
+            color: rgb(0, 0, 129);
         }
         
         /* Dashboard styles */
@@ -78,6 +78,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    {% if not hide_navbar %}
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
@@ -123,6 +124,7 @@
             </div>
         </div>
     </nav>
+    {% endif %}
 
     <!-- Message Display -->
     {% if messages %}
@@ -139,7 +141,51 @@
     {% endif %}
 
     <!-- Main Content -->
-    {% block content %}{% endblock %}
+    {% if request.session.user_id %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar py-3">
+                <div class="list-group">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a href="{% url 'appointments' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'appointments' %}active{% endif %}">
+                        <i class="fas fa-calendar-alt"></i> Appointments
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-notes-medical"></i> Medical History
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-hospital"></i> Hospitals
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-clipboard-list"></i> Health Surveys
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-pills"></i> Medicine Delivery
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shield-alt"></i> Insurance
+                    </a>
+                    <a href="{% url 'emergency' %}" class="list-group-item list-group-item-action text-danger {% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">
+                        <i class="fas fa-exclamation-circle"></i> Emergency Services
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div class="col-md-9 col-lg-10">
+                {% block dashboard_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% block main_content %}{% endblock %}
+    {% endif %}
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">

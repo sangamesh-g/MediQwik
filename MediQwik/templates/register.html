@@ -50,7 +50,8 @@
 </style>
 {% endblock %}
 
-{% block content %}
+{% with hide_navbar=True %}
+{% block main_content %}
 <div class="container register-container">
     <div class="register-header">
         <img src="/static/images/mediqwik logo.png" alt="MediQwik" height="80" class="register-logo">
@@ -120,6 +121,7 @@
     </div>
 </div>
 {% endblock %}
+{% endwith %}
 
 {% block extra_js %}
 <script>

@@ -188,3 +188,33 @@ def check_email(request):
         'success': False,
         'message': 'Invalid request method'
     }, status=400)
+
+def profile(request):
+    """Render the user profile page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access your profile')
+        return redirect('login')
+    
+    try:
+        user = Register.objects.get(id=request.session['user_id'])
+        context = {
+            'user': user
+        }
+        return render(request, 'profile.html', context)
+    except Register.DoesNotExist:
+        messages.error(request, 'User not found')
+        return redirect('login')
+
+def appointments(request):
+    """Render the appointments page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access appointments')
+        return redirect('login')
+    return render(request, 'appointments.html')
+
+def emergency(request):
+    """Render the emergency services page"""
+    if 'user_id' not in request.session:
+        messages.error(request, 'Please login to access emergency services')
+        return redirect('login')
+    return render(request, 'emergency.html')

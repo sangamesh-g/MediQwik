@@ -1,176 +1,139 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-     <style>
-/* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    color: white;
-    padding: 80px 0;
-}
-
-/* Feature Cards */
-.feature-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    height: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-.feature-icon {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Emergency Card */
-.emergency-card {
-    border: 2px solid #dc3545;
-}
-     </style>
-{% endblock %}
-
-{% block content %}
-    <!-- Hero Section -->
-    <header class="hero-section text-center py-5">
-        <div class="container">
-            <img src="/static/images/mediqwik logo.png" alt="MediQwik" height="100" class="mb-4">
-            <h1 class="display-4 fw-bold mb-4">Welcome to MediQwik</h1>
-            <p class="lead mb-5">Your complete healthcare management solution. Register now to access all features.</p>
+{% block main_content %}
+<!-- Hero Section -->
+<header class="hero-section text-center py-5">
+    <div class="container">
+        <img src="/static/images/mediqwik logo.png" alt="MediQwik" height="100" class="mb-4">
+        <h1 class="display-4 fw-bold mb-4">Welcome to MediQwik</h1>
+        <p class="lead mb-5">Your complete healthcare management solution. Register now to access all features.</p>
         <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-5">
-                Register Now
+            Register Now
         </a>
-        </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Features Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-5">Our Features</h2>
-            <div class="row g-4">
-                <!-- Feature 1: Profile Management -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-user-circle fa-3x text-primary"></i>
-                        </div>
-                        <h4>Profile Management</h4>
-                        <p>Update your personal information and medical history securely in one place.</p>
-                        <a href="profile.html" class="btn btn-outline-primary mt-2">Manage Profile</a>
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Features</h2>
+        <div class="row g-4">
+            <!-- Feature 1: Profile Management -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-user-circle fa-3x text-primary"></i>
                     </div>
+                    <h4>Profile Management</h4>
+                    <p>Update your personal information and medical history securely in one place.</p>
+                    <a href="profile.html" class="btn btn-outline-primary mt-2">Manage Profile</a>
                 </div>
-                
-                <!-- Feature 2: Medical History -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-file-medical fa-3x text-primary"></i>
-                        </div>
-                        <h4>Medical History</h4>
-                        <p>View and update your complete medical records, allergies, and medications.</p>
-                        <a href="medical-history.html" class="btn btn-outline-primary mt-2">View Records</a>
+            </div>
+            
+            <!-- Feature 2: Medical History -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-file-medical fa-3x text-primary"></i>
                     </div>
+                    <h4>Medical History</h4>
+                    <p>View and update your complete medical records, allergies, and medications.</p>
+                    <a href="medical-history.html" class="btn btn-outline-primary mt-2">View Records</a>
                 </div>
-                
-                <!-- Feature 3: Hospital Tracking -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-hospital fa-3x text-primary"></i>
-                        </div>
-                        <h4>Hospital Tracking</h4>
-                        <p>Find nearby hospitals with the best facilities and ambulance services.</p>
-                        <a href="hospitals.html" class="btn btn-outline-primary mt-2">Find Hospitals</a>
+            </div>
+            
+            <!-- Feature 3: Hospital Tracking -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-hospital fa-3x text-primary"></i>
                     </div>
+                    <h4>Hospital Tracking</h4>
+                    <p>Find nearby hospitals with the best facilities and ambulance services.</p>
+                    <a href="hospitals.html" class="btn btn-outline-primary mt-2">Find Hospitals</a>
                 </div>
-                
-                <!-- Feature 4: Health Surveys -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-clipboard-list fa-3x text-primary"></i>
-                        </div>
-                        <h4>Health Surveys</h4>
-                        <p>Take regular health surveys to track your wellbeing and receive personalized advice.</p>
-                        <a href="surveys.html" class="btn btn-outline-primary mt-2">Take Survey</a>
+            </div>
+            
+            <!-- Feature 4: Health Surveys -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-clipboard-list fa-3x text-primary"></i>
                     </div>
+                    <h4>Health Surveys</h4>
+                    <p>Take regular health surveys to track your wellbeing and receive personalized advice.</p>
+                    <a href="surveys.html" class="btn btn-outline-primary mt-2">Take Survey</a>
                 </div>
-                
-                <!-- Feature 5: Appointment Booking -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-calendar-check fa-3x text-primary"></i>
-                        </div>
-                        <h4>Appointment Booking</h4>
-                        <p>Schedule appointments with doctors and specialists with just a few clicks.</p>
-                        <a href="appointments.html" class="btn btn-outline-primary mt-2">Book Appointment</a>
+            </div>
+            
+            <!-- Feature 5: Appointment Booking -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-calendar-check fa-3x text-primary"></i>
                     </div>
+                    <h4>Appointment Booking</h4>
+                    <p>Schedule appointments with doctors and specialists with just a few clicks.</p>
+                    <a href="appointments.html" class="btn btn-outline-primary mt-2">Book Appointment</a>
                 </div>
-                
-                <!-- Feature 6: Medicine Delivery -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-pills fa-3x text-primary"></i>
-                        </div>
-                        <h4>Medicine Delivery</h4>
-                        <p>Order prescribed medications and get them delivered to your doorstep.</p>
-                        <a href="medicine.html" class="btn btn-outline-primary mt-2">Order Medicine</a>
+            </div>
+            
+            <!-- Feature 6: Medicine Delivery -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-pills fa-3x text-primary"></i>
                     </div>
+                    <h4>Medicine Delivery</h4>
+                    <p>Order prescribed medications and get them delivered to your doorstep.</p>
+                    <a href="medicine.html" class="btn btn-outline-primary mt-2">Order Medicine</a>
                 </div>
-                
-                <!-- Feature 7: Ambulance Service -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-ambulance fa-3x text-primary"></i>
-                        </div>
-                        <h4>Ambulance Service</h4>
-                        <p>Request emergency ambulance services with real-time tracking.</p>
-                        <a href="ambulance.html" class="btn btn-outline-primary mt-2">Request Ambulance</a>
+            </div>
+            
+            <!-- Feature 7: Ambulance Service -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-ambulance fa-3x text-primary"></i>
                     </div>
+                    <h4>Ambulance Service</h4>
+                    <p>Request emergency ambulance services with real-time tracking.</p>
+                    <a href="ambulance.html" class="btn btn-outline-primary mt-2">Request Ambulance</a>
                 </div>
-                
-                <!-- Feature 8: Insurance Details -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
-                        </div>
-                        <h4>Insurance Management</h4>
-                        <p>Manage your health insurance information and track claims easily.</p>
-                        <a href="insurance.html" class="btn btn-outline-primary mt-2">Manage Insurance</a>
+            </div>
+            
+            <!-- Feature 8: Insurance Details -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-primary"></i>
                     </div>
+                    <h4>Insurance Management</h4>
+                    <p>Manage your health insurance information and track claims easily.</p>
+                    <a href="insurance.html" class="btn btn-outline-primary mt-2">Manage Insurance</a>
                 </div>
-                
-                <!-- Feature 9: Emergency Services -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card text-center p-4 emergency-card">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
-                        </div>
-                        <h4>Emergency Services</h4>
-                        <p>Quick access to emergency services and nearest medical facilities.</p>
-                        <a href="emergency.html" class="btn btn-danger mt-2">Emergency Help</a>
+            </div>
+            
+            <!-- Feature 9: Emergency Services -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 emergency-card">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
                     </div>
+                    <h4>Emergency Services</h4>
+                    <p>Quick access to emergency services and nearest medical facilities.</p>
+                    <a href="emergency.html" class="btn btn-danger mt-2">Emergency Help</a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Call to Action -->
-    <section class="py-5 bg-primary text-white text-center">
-        <div class="container">
-            <h2 class="mb-4">Ready to take control of your healthcare?</h2>
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="mb-4">Ready to take control of your healthcare?</h2>
         <p class="lead mb-4">Join thousands of patients who have simplified their healthcare journey with MediQwik.</p>
         <div class="d-flex justify-content-center gap-3">
             <a href="{% url 'register' %}" class="btn btn-light btn-lg px-5">Register Now</a>
