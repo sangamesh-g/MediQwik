@@ -57,7 +57,7 @@
     <div class="specialty-section mb-4">
         <h2 class="mb-4">What kind of medical care do you need?</h2>
         <div class="row g-4">
-            <!-- {% for specialty in specialties %}
+            {% for specialty in specialties %}
             <div class="col-md-4">
                 <a href="{% url 'hospitals' %}?specialty={{ specialty.id }}" class="text-decoration-none">
                     <div class="specialty-card text-center">
@@ -69,7 +69,7 @@
                     </div>
                 </a>
             </div>
-            {% endfor %} -->
+            {% endfor %}
         </div>
     </div>
 
