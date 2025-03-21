@@ -13,44 +13,71 @@
     <!-- Custom CSS -->
     <style>
         /* General Styles */
-        body {
+        html, body {
+            margin: 0;
+            padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
         }
         
-        /* Navbar styles */
+        /* Navbar styles - remove top spacing */
+        .navbar {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        
         .navbar-brand i {
             color: rgb(0, 0, 129);
         }
         
-        /* Dashboard styles */
-        .sidebar {
-            min-height: calc(100vh - 56px);
+        /* Top Navigation (former sidebar) */
+        .top-navigation {
             background-color: #f8f9fa;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        .sidebar .nav-link {
+        .top-navigation .nav-item {
+            margin: 0 5px;
+        }
+        
+        .top-navigation .nav-link {
             color: #333;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
         }
         
-        .sidebar .nav-link:hover {
+        .top-navigation .nav-link:hover {
             background-color: #e9ecef;
         }
         
-        .sidebar .nav-link.active {
+        .top-navigation .nav-link.active {
             background-color: #0d6efd;
             color: white;
         }
         
-        .sidebar .nav-link i {
-            margin-right: 10px;
+        .top-navigation .nav-link i {
+            margin-right: 8px;
+        }
+        
+        /* Horizontal scrolling for smaller screens */
+        @media (max-width: 992px) {
+            .top-navigation .navbar-nav {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
         }
         
         .content-wrapper {
             padding: 20px;
         }
 
-        /* Add these styles to your existing CSS */
+        /* Feature cards */
         .feature-card {
             background-color: white;
             border-radius: 10px;
@@ -143,40 +170,67 @@
     <!-- Main Content -->
     {% if request.session.user_id %}
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar py-3">
-                <div class="list-group">
-                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i> Home
-                    </a>
-                    <a href="{% url 'appointments' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'appointments' %}active{% endif %}">
-                        <i class="fas fa-calendar-alt"></i> Appointments
-                    </a>
-                    <a href="{% url 'medical_history' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'medical_history' %}active{% endif %}">
-                        <i class="fas fa-notes-medical"></i> Medical History
-                    </a>
-                    <a href="{% url 'hospitals' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'hospitals' %}active{% endif %}">
-                        <i class="fas fa-hospital"></i> Hospitals
-                    </a>
-                    <a href="{% url 'health_surveys' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'health_surveys' %}active{% endif %}">
-                        <i class="fas fa-clipboard-list"></i> Health Surveys
-                    </a>
-                    <a href="{% url 'medicine_delivery' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'medicine_delivery' %}active{% endif %}">
-                        <i class="fas fa-pills"></i> Medicine Delivery
-                    </a>
-                    <a href="{% url 'insurance' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'insurance' %}active{% endif %}">
-                        <i class="fas fa-shield-alt"></i> Insurance
-                    </a>
-                    <a href="{% url 'emergency' %}" class="list-group-item list-group-item-action text-danger {% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">
-                        <i class="fas fa-exclamation-circle"></i> Emergency Services
-                    </a>
-                </div>
+        <!-- Top Navigation (formerly sidebar) -->
+        <div class="top-navigation">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light p-0">
+                    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#topNavigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="topNavigation">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                                    <i class="fas fa-tachometer-alt"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'appointments' %}" class="nav-link {% if request.resolver_match.url_name == 'appointments' %}active{% endif %}">
+                                    <i class="fas fa-calendar-alt"></i> Appointments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'medical_history' %}" class="nav-link {% if request.resolver_match.url_name == 'medical_history' %}active{% endif %}">
+                                    <i class="fas fa-notes-medical"></i> Medical History
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'hospitals' %}" class="nav-link {% if request.resolver_match.url_name == 'hospitals' %}active{% endif %}">
+                                    <i class="fas fa-hospital"></i> Hospitals
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'health_surveys' %}" class="nav-link {% if request.resolver_match.url_name == 'health_surveys' %}active{% endif %}">
+                                    <i class="fas fa-clipboard-list"></i> Health Surveys
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'medicine_delivery' %}" class="nav-link {% if request.resolver_match.url_name == 'medicine_delivery' %}active{% endif %}">
+                                    <i class="fas fa-pills"></i> Medicine Delivery
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'insurance' %}" class="nav-link {% if request.resolver_match.url_name == 'insurance' %}active{% endif %}">
+                                    <i class="fas fa-shield-alt"></i> Insurance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'emergency' %}" class="nav-link text-danger {% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">
+                                    <i class="fas fa-exclamation-circle"></i> Emergency Services
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
+        </div>
 
-            <!-- Dynamic Content Area -->
-            <div class="col-md-9 col-lg-10">
-                {% block dashboard_content %}{% endblock %}
+        <!-- Dynamic Content Area (now full width) -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% block dashboard_content %}{% endblock %}
+                </div>
             </div>
         </div>
     </div>

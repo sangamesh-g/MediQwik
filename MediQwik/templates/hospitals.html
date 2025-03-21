@@ -63,8 +63,8 @@
                 All Hospitals
             </a>
             {% for specialty in specialties %}
-            <a href="?specialty={{ specialty.id }}" 
-               class="btn btn-outline-primary specialty-btn {% if selected_specialty == specialty.id %}active{% endif %}">
+            <a href="{% url 'hospitals' %}?specialty={{ specialty.slug }}" 
+               class="btn btn-outline-primary specialty-btn {% if selected_specialty == specialty.slug %}active{% endif %}">
                 <i class="{{ specialty.icon }} me-2"></i>{{ specialty.name }}
             </a>
             {% endfor %}

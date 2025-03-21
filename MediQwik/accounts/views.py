@@ -261,43 +261,48 @@ def hospital_list(request):
     })
 
 def hospitals(request):
-    """Render the hospitals page with filtering"""
+    # Check if user is logged in
     if 'user_id' not in request.session:
-        messages.error(request, 'Please login to view hospitals')
+        messages.error(request, 'Please login to access the hospitals page.')
         return redirect('login')
     
-    specialty = request.GET.get('specialty', '')
+    # Get the selected specialty from the URL query parameter
+    selected_specialty = request.GET.get('specialty', None)
     
-    # Get all hospitals if no specialty is selected, otherwise filter by specialty
-    if specialty:
-        hospitals = Hospital.objects.filter(
-            is_active=True,
-            specialties__contains=specialty
-        ).order_by('-rating')
-    else:
-        hospitals = Hospital.objects.filter(is_active=True).order_by('-rating')
+    # Get all hospitals
+    hospitals = Hospital.objects.filter(is_active=True)
     
-    # Get unique specialties from the database
-    all_specialties = Hospital.objects.values_list('specialties', flat=True)
-    unique_specialties = set()
-    for hospital_specialties in all_specialties:
-        if isinstance(hospital_specialties, list):
-            unique_specialties.update(hospital_specialties)
+    # Filter hospitals by specialty if a specialty is selected
+    if selected_specialty:
+        # Filter hospitals where the selected specialty is in the specialties JSON field
+        hospitals = hospitals.filter(specialties__contains=[selected_specialty])
     
+    # Get all specialties for the filter buttons
     specialties = [
-        {
-            'id': specialty,
-            'name': specialty.replace('-', ' ').title(),
-            'icon': get_specialty_icon(specialty)
-        }
-        for specialty in sorted(unique_specialties)
+        {'slug': 'cardiology', 'name': 'Cardiology', 'icon': 'fas fa-heartbeat'},
+        {'slug': 'dental', 'name': 'Dental', 'icon': 'fas fa-tooth'},
+        {'slug': 'dermatology', 'name': 'Dermatology', 'icon': 'fas fa-allergies'},
+        {'slug': 'ent', 'name': 'ENT', 'icon': 'fas fa-ear'},
+        {'slug': 'eye', 'name': 'Eye Care', 'icon': 'fas fa-eye'},
+        {'slug': 'gastrology', 'name': 'Gastrology', 'icon': 'fas fa-stomach'},
+        {'slug': 'general', 'name': 'General Medicine', 'icon': 'fas fa-user-md'},
+        {'slug': 'gynecology', 'name': 'Gynecology', 'icon': 'fas fa-female'},
+        {'slug': 'neurology', 'name': 'Neurology', 'icon': 'fas fa-brain'},
+        {'slug': 'orthopedics', 'name': 'Orthopedics', 'icon': 'fas fa-bone'},
+        {'slug': 'pediatrics', 'name': 'Pediatrics', 'icon': 'fas fa-baby'},
+        {'slug': 'physiotherapy', 'name': 'Physiotherapy', 'icon': 'fas fa-walking'},
+        {'slug': 'plastic-surgery', 'name': 'Plastic Surgery', 'icon': 'fas fa-magic'},
+        {'slug': 'pulmonology', 'name': 'Pulmonology', 'icon': 'fas fa-lungs'},
+        {'slug': 'urology', 'name': 'Urology', 'icon': 'fas fa-kidney'}
     ]
     
-    return render(request, 'hospitals.html', {
+    context = {
         'hospitals': hospitals,
         'specialties': specialties,
-        'selected_specialty': specialty
-    })
+        'selected_specialty': selected_specialty
+    }
+    
+    return render(request, 'hospitals.html', context)
 
 def get_specialty_icon(specialty):
     """Helper function to get the appropriate icon for each specialty"""
