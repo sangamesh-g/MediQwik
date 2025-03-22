@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Register(models.Model):
     """Model for storing user registration data"""
@@ -71,6 +72,19 @@ class Hospital(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_directions_url(self):
+        """
+        Generate a Google Maps directions URL based on latitude/longitude
+        or fall back to address if coordinates aren't available
+        """
+        if self.latitude and self.longitude:
+            return f"https://www.google.com/maps/dir/?api=1&destination={self.latitude},{self.longitude}"
+        elif self.address:
+            # If no coordinates, use the address (less precise)
+            formatted_address = self.address.replace(' ', '+')
+            return f"https://www.google.com/maps/dir/?api=1&destination={formatted_address}"
+        return None
 
     class Meta:
         verbose_name = "Hospital"

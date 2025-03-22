@@ -68,7 +68,14 @@
                                 {% endfor %}
                                 <span class="ms-2">({{ hospital.rating }}/5)</span>
                             </div>
-                            <p><i class="fas fa-map-marker-alt text-danger"></i> {{ hospital.address }}</p>
+                            <p>
+                                <i class="fas fa-map-marker-alt text-danger me-2"></i> {{ hospital.address }}
+                                {% if hospital.latitude and hospital.longitude or hospital.address %}
+                                <a href="{{ hospital.get_directions_url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fas fa-directions"></i> Directions
+                                </a>
+                                {% endif %}
+                            </p>
                             <div class="facilities mb-2">
                                 {% if hospital.has_emergency %}
                                     <span class="badge bg-danger me-2">Emergency Services</span>
