@@ -55,13 +55,28 @@ class Login(models.Model):
         verbose_name = "Login Session"
         verbose_name_plural = "Login Sessions"
 
+class Specialty(models.Model):
+    """Model for medical specialties"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    icon = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = "Specialty"
+        verbose_name_plural = "Specialties"
+
 class Hospital(models.Model):
     """Model for storing hospital information"""
     name = models.CharField(max_length=200)
     address = models.TextField()
     phone = models.CharField(max_length=15)
     email = models.EmailField(blank=True, null=True)
-    specialties = models.JSONField(default=list)  # Changed to have a default value
+    specialties = models.JSONField(default=list)  # Keep the old field
+    specialty_relations = models.ManyToManyField('Specialty', blank=True)  # Add new field with string reference
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
     is_active = models.BooleanField(default=True)
     has_emergency = models.BooleanField(default=False)
