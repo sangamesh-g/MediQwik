@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .hospitals-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .filter-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .specialty-btn {
+        margin: 0.25rem;
+    }
+    
+    .hospital-card {
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    
+    .hospital-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+    }
+    
+    .availability-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="hospitals-header">
+        <h2 class="mb-3">Find Hospitals</h2>
+        <p class="lead mb-0">Discover and connect with the best hospitals in your area</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <h4 class="mb-3">Filter by Specialty</h4>
+        <div class="d-flex flex-wrap">
+            <a href="{% url 'hospitals' %}" class="btn btn-outline-primary specialty-btn {% if not selected_specialty %}active{% endif %}">
+                All Hospitals
+            </a>
+            {% for specialty in specialties %}
+            <a href="{% url 'hospitals' %}?specialty={{ specialty.slug }}" 
+               class="btn btn-outline-primary specialty-btn {% if selected_specialty == specialty.slug %}active{% endif %}">
+                <i class="{{ specialty.icon }} me-2"></i>{{ specialty.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Hospital Cards -->
+    <div class="row">
+        {% if hospitals %}
+            {% for hospital in hospitals %}
+            <div class="col-md-6 mb-4">
+                <div class="hospital-card p-3">
+                    {% if hospital.has_emergency %}
+                    <span class="badge bg-danger availability-badge">Emergency Services Available</span>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>{{ hospital.name }}</h4>
+                            <div class="rating-stars mb-2">
+                                {% with ''|center:hospital.rating|make_list as stars %}
+                                {% for _ in stars %}
+                                    <i class="fas fa-star"></i>
+                                {% endfor %}
+                                {% endwith %}
+                                <span class="ms-2">({{ hospital.rating }}/5)</span>
+                            </div>
+                            <p>
+                                <i class="fas fa-map-marker-alt text-danger me-2"></i>{{ hospital.address }}
+                                {% if hospital.latitude and hospital.longitude or hospital.address %}
+                                <a href="{{ hospital.get_directions_url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fas fa-directions"></i> Directions
+                                </a>
+                                {% endif %}
+                            </p>
+                            <p><i class="fas fa-phone text-primary me-2"></i>{{ hospital.phone }}</p>
+                            
+                            <div class="specialties mb-3">
+                                {% for specialty in hospital.specialties %}
+                                <a href="{% url 'hospitals' %}?specialty={{ specialty }}" class="badge bg-info me-1 text-decoration-none">
+                                    {{ specialty|title }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'appointments' %}?hospital={{ hospital.id }}" class="btn btn-primary btn-sm">
+                                    Book Appointment
+                                </a>
+                                <button class="btn btn-outline-primary btn-sm">View Details</button>
+                                {% if hospital.has_emergency %}
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="fas fa-ambulance me-1"></i>Emergency
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    {% if selected_specialty %}
+                        No hospitals found for {{ selected_specialty|title }} specialty. Please try a different specialty.
+                    {% else %}
+                        No hospitals found in the database.
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

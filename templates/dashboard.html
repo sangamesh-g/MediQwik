@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .specialty-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .specialty-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        height: 100%;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .specialty-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #0d6efd;
+    }
+    
+    .specialty-card.selected {
+        border-color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+    
+    .specialty-icon {
+        font-size: 2rem;
+        color: #0d6efd;
+        margin-bottom: 1rem;
+    }
+    
+    .specialty-title {
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .specialty-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <!-- Specialty Selection Section -->
+    <div class="specialty-section mb-4">
+        <h2 class="mb-4">What kind of medical care do you need?</h2>
+        <div class="row g-4">
+            {% for specialty in specialties %}
+            <div class="col-md-4">
+                <a href="{% url 'hospitals' %}?specialty={{ specialty.id }}" class="text-decoration-none">
+                    <div class="specialty-card text-center">
+                        <div class="specialty-icon mb-3">
+                            <i class="{{ specialty.icon }} fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="specialty-title text-dark">{{ specialty.name }}</h4>
+                        <p class="specialty-description text-muted">{{ specialty.description }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Quick Information -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-info-circle text-primary me-2"></i>How it works</h5>
+                    <ol class="mb-0">
+                        <li>Select your medical specialty</li>
+                        <li>View matching hospitals</li>
+                        <li>Check ratings and availability</li>
+                        <li>Book your appointment</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-star text-primary me-2"></i>Why Choose Us</h5>
+                    <ul class="mb-0">
+                        <li>Verified hospitals and doctors</li>
+                        <li>Real-time availability</li>
+                        <li>Patient reviews and ratings</li>
+                        <li>24/7 support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-phone-alt text-primary me-2"></i>Need Help?</h5>
+                    <p class="mb-2">Our support team is available 24/7</p>
+                    <a href="tel:1800-123-4567" class="btn btn-primary">Call Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define specialties data
+    const specialties = [
+       ];
+
+    // Generate specialty cards
+    const row = document.querySelector('.row.g-4');
+    specialties.forEach(specialty => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+        col.innerHTML = `
+            <div class="specialty-card" onclick="selectSpecialty(this, '${specialty.id}')">
+                <div class="specialty-icon">
+                    <i class="${specialty.icon}"></i>
+                </div>
+                <h4 class="specialty-title">${specialty.name}</h4>
+                <p class="specialty-description">${specialty.description}</p>
+            </div>
+        `;
+        row.appendChild(col);
+    });
+});
+
+function selectSpecialty(card, specialtyId) {
+    // Remove selection from all cards
+    document.querySelectorAll('.specialty-card').forEach(c => {
+        c.classList.remove('selected');
+    });
+    
+    // Add selection to clicked card
+    card.classList.add('selected');
+    
+    // Update hidden input
+    document.getElementById('selectedSpecialty').value = specialtyId;
+}
+</script>
+{% endblock %}

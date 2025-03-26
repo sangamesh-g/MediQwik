@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .register-container {
+        max-width: 800px;
+        margin: 60px auto;
+    }
+    
+    .register-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .register-form {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .register-logo {
+        margin-bottom: 20px;
+    }
+    
+    .alert {
+        margin-bottom: 1rem;
+        animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+</style>
+{% endblock %}
+
+{% with hide_navbar=True %}
+{% block main_content %}
+<div class="container register-container">
+    <div class="register-header">
+        <img src="/static/images/mediqwik logo.png" alt="MediQwik" height="80" class="register-logo">
+        <h2>Create Your Account</h2>
+        <p class="text-muted">Join MediQwik to manage your healthcare journey</p>
+    </div>
+    
+    <div class="register-form">
+        <div id="registrationFormError"></div>
+        <form id="registrationForm" action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="registerEmail" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="registerEmail" name="registerEmail" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="" selected disabled>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="registerPassword" name="registerPassword" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="termsCheck" name="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                </div>
+            </div>
+        </form>
+        <hr class="my-4">
+        <div class="text-center">
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% endwith %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to show error message
+        function showFormError(formId, message) {
+            const errorDiv = document.getElementById(formId + 'Error');
+            if (!errorDiv) {
+                const div = document.createElement('div');
+                div.className = 'alert alert-danger alert-dismissible fade show mt-3';
+                div.id = formId + 'Error';
+                div.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                document.getElementById(formId).insertAdjacentElement('beforebegin', div);
+            } else {
+                errorDiv.textContent = message;
+            }
+        }
+
+        // Function to clear error message
+        function clearFormError(formId) {
+            const errorDiv = document.getElementById(formId + 'Error');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+
+        // Handle registration form submission
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) {
+            // Real-time password validation
+            const registerPassword = document.getElementById('registerPassword');
+            registerPassword.addEventListener('input', function() {
+                if (this.value.length < 8) {
+                    showFormError('registrationForm', 'Password must be at least 8 characters long');
+                } else {
+                    clearFormError('registrationForm');
+                }
+            });
+
+            // Real-time password match validation
+            const confirmPassword = document.getElementById('confirmPassword');
+            confirmPassword.addEventListener('input', function() {
+                if (this.value !== registerPassword.value) {
+                    showFormError('registrationForm', 'Passwords do not match');
+                } else {
+                    clearFormError('registrationForm');
+                }
+            });
+
+            // Real-time email validation
+            const registerEmail = document.getElementById('registerEmail');
+            registerEmail.addEventListener('blur', function() {
+                if (this.value && !this.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                    showFormError('registrationForm', 'Please enter a valid email address');
+                } else if (this.value) {
+                    clearFormError('registrationForm');
+                    // Check if email already exists
+                    const formData = new FormData();
+                    formData.append('email', this.value);
+                    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                    
+                    fetch('/check-email/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            showFormError('registrationForm', 'This email is already registered');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking email:', error);
+                    });
+                }
+            });
+
+            // Form submission
+            registrationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearFormError('registrationForm');
+                        
+                // Collect form data
+                const formData = new FormData(this);
+                
+                // Validate required fields
+                const requiredFields = {
+                    firstName: 'First Name',
+                    lastName: 'Last Name',
+                    registerEmail: 'Email',
+                    phone: 'Phone Number',
+                    dob: 'Date of Birth',
+                    gender: 'Gender',
+                    registerPassword: 'Password',
+                    confirmPassword: 'Confirm Password'
+                };
+
+                for (const [field, label] of Object.entries(requiredFields)) {
+                    if (!formData.get(field)) {
+                        showFormError('registrationForm', `${label} is required`);
+                        return;
+                    }
+                }
+
+                // Validate password match
+                if (formData.get('registerPassword') !== formData.get('confirmPassword')) {
+                    showFormError('registrationForm', 'Passwords do not match');
+                    return;
+                }
+
+                // Validate terms acceptance
+                if (!formData.get('termsCheck')) {
+                    showFormError('registrationForm', 'Please accept the Terms of Service and Privacy Policy');
+                    return;
+                }
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message and redirect
+                        const successDiv = document.createElement('div');
+                        successDiv.className = 'alert alert-success';
+                        successDiv.textContent = data.message;
+                        this.insertAdjacentElement('beforebegin', successDiv);
+                        
+                        setTimeout(() => {
+                            window.location.href = data.redirect;
+                        }, 2000);
+                    } else {
+                        showFormError('registrationForm', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showFormError('registrationForm', 'An error occurred. Please try again.');
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}
